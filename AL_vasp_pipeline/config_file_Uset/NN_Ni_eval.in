@@ -1,0 +1,81 @@
+[BISPECTRUM]
+numTypes = 1
+twojmax = 8
+rcutfac = 4.1
+rfac0 = 0.99363
+rmin0 = 0.0
+wj = 1.0
+radelem = 0.5
+type = Ni
+wselfallflag = 0
+chemflag = 0
+bzeroflag = 1
+quadraticflag = 0
+bikflag = 1
+dgradflag = 1
+
+[CALCULATOR]
+calculator = LAMMPSSNAP
+energy = 1
+per_atom_energy = 1
+force = 1
+stress = 0
+nonlinear = 1
+
+[ESHIFT]
+Ni = 0.0
+
+[PYTORCH]
+layer_sizes = num_desc 55 64 32 16 1
+learning_rate = 1.5e-4 
+num_epochs = 1000
+batch_size = 4 # 363 configs in entire set
+save_state_output = Ni_Pytorch.pt
+energy_weight = 1.0
+force_weight = 10.0
+training_fraction = 1
+
+[SOLVER]
+solver = PYTORCH
+compute_testerrs = 1
+detailed_errors = 1
+
+[SCRAPER]
+scraper = JSON
+
+[PATH]
+dataPath =/home/localdmonte/fs-ensembles/AL_vasp_pipeline/Unlabeled_set
+
+[OUTFILE]
+metrics = Ni_metrics_eval.dat
+potential = Ni_pot
+
+[REFERENCE]
+units = metal
+atom_style = atomic
+pair_style = zero 10.0
+pair_coeff1 = * *
+#pair_style = hybrid/overlay zero 10.0 zbl 4.0 4.8
+#pair_coeff1 = * * zero
+#pair_coeff2 = * * zbl 73 73
+
+[GROUPS]
+group_sections = name training_size testing_size eweight fweight vweight
+group_types = str float float float float float
+smartweights = 0
+random_sampling = 0
+all_json = 1  0  1.0e6 1.0e6 1.0e-12
+
+
+
+[EXTRAS]
+dump_descriptors = 0
+dump_truth = 0
+dump_weights = 0
+dump_dataframe = 1
+dump_peratom = 1
+dump_perconfig = 1
+dump_configs = 1   # write a pickled list of Configuration objects
+
+[MEMORY]
+override = 0
